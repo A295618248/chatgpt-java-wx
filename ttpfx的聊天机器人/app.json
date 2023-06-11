@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/iat/iat",
     "pages/login/login",
     "pages/index/index",
     "pages/home/home",
@@ -8,7 +9,7 @@
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "ttpfx的聊天助手",
+    "navigationBarTitleText": "EngPal",
     "navigationBarTextStyle": "black"
   },
   "style": "v2",
@@ -33,7 +34,14 @@
         "text": "我的",
         "iconPath": "/images/我的.png",
         "selectedIconPath": "/images/我的 (1).png"
+      },
+      {
+        "pagePath": "pages/iat/iat",
+        "text": "语音识别",
+        "iconPath": "/images/我的.png",
+        "selectedIconPath": "/images/我的 (1).png"
       }
     ]
-  }
+  },
+  "debug":true
 }

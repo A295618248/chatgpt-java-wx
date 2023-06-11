@@ -1,5 +1,6 @@
 package com.ttpfx.entity;
 
+import com.ttpfx.controller.RegisterUserCommand;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,4 +19,8 @@ public class User {
     private String username;
     private String password;
     private LocalDateTime createTime;
+
+    public User(RegisterUserCommand command) {
+
+    }
 }

@@ -3,6 +3,7 @@ package com.ttpfx.controller;
 import com.ttpfx.entity.User;
 import com.ttpfx.service.UserService;
 import com.ttpfx.utils.R;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,6 +25,18 @@ public class UserController {
     public static ConcurrentHashMap<String, User> loginUser = new ConcurrentHashMap<>();
 
     public static ConcurrentHashMap<String, Long> loginUserKey = new ConcurrentHashMap<>();
+
+    @PostMapping
+    public R register(RegisterUserCommand command){
+        User user = userService.findByPhone(command.getPhone());
+        if (user != null) {
+            throw new RuntimeException("该手机号已经注册过了，请勿重复注册");
+        }
+        user = new User(command);
+        userService.save(user);
+        return R.ok("注册成功");
+    }
+
     @RequestMapping("/login")
     public R login(String username, String password) {
         if (username == null) return R.fail("必须填写用户名");

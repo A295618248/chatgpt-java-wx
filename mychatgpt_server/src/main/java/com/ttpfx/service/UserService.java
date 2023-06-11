@@ -10,4 +10,8 @@ public interface UserService{
 
 
     User queryByName(String username);
+
+    User findByPhone(String phone);
+
+    void save(User user);
 }

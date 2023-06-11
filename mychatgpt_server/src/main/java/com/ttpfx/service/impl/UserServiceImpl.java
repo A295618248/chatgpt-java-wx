@@ -21,4 +21,14 @@ public class UserServiceImpl implements UserService {
     public User queryByName(String username) {
         return userMapper.queryByName(username);
     }
+
+    @Override
+    public User findByPhone(String phone) {
+        return userMapper.findByPhone();
+    }
+
+    @Override
+    public void save(User user) {
+        
+    }
 }

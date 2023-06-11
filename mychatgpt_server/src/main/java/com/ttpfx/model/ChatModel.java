@@ -2,6 +2,7 @@ package com.ttpfx.model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ttpfx.server.ChatgptTemplate;
 import com.ttpfx.vo.chat.ChatMessage;
 import com.ttpfx.vo.chat.ChatRequestParameter;
 import com.ttpfx.vo.chat.ChatResponseParameter;
@@ -14,6 +15,7 @@ import org.apache.hc.client5.http.impl.routing.DefaultProxyRoutePlanner;
 import org.apache.hc.core5.concurrent.FutureCallback;
 import org.apache.hc.core5.http.*;
 import org.apache.hc.core5.http.nio.support.AsyncRequestBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -24,6 +26,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.function.Consumer;
 
@@ -48,6 +51,9 @@ public class ChatModel {
     @Resource
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private ChatgptTemplate chatgptTemplate;
+
     /**
      * 该方法会异步请求chatGpt的接口，返回答案
      *
@@ -60,7 +66,11 @@ public class ChatModel {
         asyncClient.start();
         // 创建一个post请求
         AsyncRequestBuilder asyncRequest = AsyncRequestBuilder.post(url);
-
+        Map<String, String> template = chatgptTemplate.getTemplate();
+        String temStr = template.get(question);
+        if (temStr !=  null) {
+            question = temStr;
+        }
         // 设置请求参数
         chatGptRequestParameter.addMessages(new ChatMessage("user", question));
 
@@ -151,8 +161,10 @@ public class ChatModel {
             @Override
             public void completed(HttpResponse response) {
                 latch.countDown();
-                chatGptRequestParameter.addMessages(new ChatMessage("assistant", sb.toString()));
-                System.out.println("回答结束！！！");
+                if (temStr == null) {
+                    chatGptRequestParameter.addMessages(new ChatMessage("assistant", sb.toString()));
+                    System.out.println("回答结束！！！");
+                }
             }
 
             @Override
